@@ -1,0 +1,215 @@
+/* ============================================
+   CODEFORGE X — Performance CSS
+   GPU layers, paint optimization, 60fps
+   ============================================ */
+
+/* ===== GPU LAYERS ===== */
+.page {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
+}
+
+.bottom-nav {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  contain: layout style paint;
+}
+
+.page-header {
+  will-change: transform;
+  transform: translateZ(0);
+  contain: layout style paint;
+}
+
+.glass-card {
+  contain: layout style;
+  transform: translateZ(0);
+}
+
+/* ===== CONTAIN OPTIMIZATION ===== */
+.quick-card,
+.feature-item,
+.library-card,
+.history-item,
+.recent-item {
+  contain: layout style paint;
+  will-change: transform;
+}
+
+/* ===== SCROLLING PERFORMANCE ===== */
+.scrollable {
+  -webkit-overflow-scrolling: touch;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  overscroll-behavior-y: contain;
+  transform: translateZ(0);
+}
+
+.page-content {
+  scroll-behavior: smooth;
+  overscroll-behavior: contain;
+}
+
+/* ===== ANIMATION PERFORMANCE ===== */
+.animate-fade-in-up,
+.animate-scale-in,
+.animate-slide-up {
+  will-change: transform, opacity;
+}
+
+/* ===== FONT RENDERING ===== */
+body {
+  text-rendering: optimizeSpeed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-display: swap;
+}
+
+/* ===== IMAGE RENDERING ===== */
+img {
+  image-rendering: -webkit-optimize-contrast;
+  content-visibility: auto;
+}
+
+canvas {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* ===== REDUCE PAINT AREAS ===== */
+.nav-icon,
+.nav-label {
+  will-change: color, transform;
+}
+
+.loader-fill {
+  will-change: width;
+  transform: translateZ(0);
+}
+
+.scan-line {
+  will-change: top;
+  transform: translateZ(0);
+}
+
+/* ===== LOW PERFORMANCE MODE ===== */
+.perf-mode * {
+  animation-duration: 0.1ms !important;
+  transition-duration: 0.1ms !important;
+}
+
+.perf-mode .glass-card {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: var(--bg-card) !important;
+}
+
+.perf-mode .bottom-nav {
+  backdrop-filter: none !important;
+  background: var(--bg-primary) !important;
+}
+
+/* ===== LAYOUT SHIFTS PREVENT ===== */
+.qr-preview-wrap {
+  min-height: 240px;
+  contain: layout;
+}
+
+.bc-preview-wrap {
+  min-height: 140px;
+  contain: layout;
+}
+
+.stats-banner {
+  contain: layout style;
+}
+
+/* ===== CRITICAL RENDERING PATH ===== */
+#page-splash {
+  contain: strict;
+}
+
+/* ===== SCROLL SNAP ===== */
+.input-tabs,
+.style-scroll,
+.filter-tabs,
+.theme-row {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tab-btn,
+.style-btn,
+.filter-btn,
+.theme-chip {
+  scroll-snap-align: start;
+}
+
+/* ===== PAINT CONTAINMENT ===== */
+.library-grid {
+  contain: layout;
+}
+
+.history-list,
+.recent-list {
+  contain: layout;
+}
+
+/* ===== TRANSFORM INSTEAD OF TOP/LEFT ===== */
+.toast {
+  will-change: transform, opacity;
+  bottom: calc(var(--nav-height) + 16px) !important;
+  transform: translateX(-50%) translateY(0);
+}
+
+.clipboard-banner {
+  will-change: transform;
+}
+
+/* ===== HARDWARE ACCELERATED TRANSITIONS ===== */
+.quick-card,
+.feature-item,
+.cf-btn,
+.export-btn,
+.nav-item,
+.back-btn,
+.icon-btn {
+  transition: transform 0.15s ease, opacity 0.15s ease, box-shadow 0.2s ease;
+  will-change: transform;
+}
+
+/* ===== PREVENT STYLE RECALC ===== */
+.page-content.scrollable {
+  isolation: isolate;
+}
+
+/* ===== CONTENT VISIBILITY ===== */
+@supports (content-visibility: auto) {
+  .recent-item,
+  .history-item,
+  .library-card,
+  .feature-item {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 70px;
+  }
+}
+
+/* ===== FONT LOADING ===== */
+@font-face {
+  font-display: swap;
+}
+
+/* ===== REDUCE BACKDROP-FILTER ON LOW-END ===== */
+@media (max-resolution: 1.5dppx) {
+  .glass-card,
+  .bottom-nav,
+  .page-header {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+}

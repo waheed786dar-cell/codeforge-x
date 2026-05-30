@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark-luxury">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
+  <!-- CRITICAL: Preconnect fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
+  <!-- CSS: performance first -->
+  <link rel="stylesheet" href="css/performance.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+
+  <!-- Fonts: display=swap for speed -->
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Orbitron:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Inline critical CSS for splash -->
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{height:100%;overflow:hidden;background:#0a0a0f;color:#fff}
+    .page{position:fixed;inset:0;display:none;flex-direction:column;background:#0a0a0f}
+    .page.page-active{display:flex}
+    #page-splash{display:flex;align-items:center;justify-content:center;z-index:999}
+  </style>
+
+  <title>CODEFORGE X</title>
+
+</head>
+<body>
+
+<!-- ========== SPLASH SCREEN ========== -->
+<div id="page-splash" class="page page-active">
+  <div class="splash-bg">
+    <canvas id="splash-particles"></canvas>
+  </div>
+  <div class="splash-content">
+    <div class="splash-logo-wrap">
+      <div class="splash-hexagon">
+        <div class="splash-hex-inner">
+          <div class="splash-icon">⬡</div>
+        </div>
+      </div>
+      <div class="splash-rings">
+        <div class="ring ring-1"></div>
+        <div class="ring ring-2"></div>
+        <div class="ring ring-3"></div>
+      </div>
+    </div>
+    <div class="splash-title">
+      <span class="splash-code">CODE</span>
+      <span class="splash-forge">FORGE</span>
+      <span class="splash-x">X</span>
+    </div>
+    <div class="splash-tagline">World's Most Advanced Generator</div>
+    <div class="splash-loader">
+      <div class="loader-bar">
+        <div class="loader-fill" id="splash-loader-fill"></div>
+      </div>
+      <div class="loader-text" id="splash-loader-text">Initializing...</div>
+    </div>
+    <div class="splash-version">v1.0.0</div>
+  </div>
+</div>
+
+<!-- Onboarding page — splash ke baad, home se pehle -->
+<div id="page-onboarding" class="page" style="display:none">
+  <!-- JS se render hoga -->
+</div>
+
+<!-- ========== HOME PAGE ========== -->
+<div id="page-home" class="page" style="display:none">
+  <div class="page-header">
+    <div class="header-left">
+      <div class="app-logo-small">⬡</div>
+      <div class="header-title">
+        <span class="title-code">CODE</span><span class="title-forge">FORGE</span><span class="title-x">X</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <button class="icon-btn" id="install-btn" style="display:none" title="Install App">
+        <span>⬇</span>
+      </button>
+      <button class="icon-btn" onclick="Router.navigate('settings')" title="Settings">
+        <span>⚙</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="page-content scrollable">
+    <!-- Stats Banner -->
+    <div class="stats-banner glass-card">
+      <div class="stat-item">
+        <div class="stat-value" id="stat-total">0</div>
+        <div class="stat-label">Total Generated</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-value" id="stat-qr">0</div>
+        <div class="stat-label">QR Codes</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-value" id="stat-barcode">0</div>
+        <div class="stat-label">Barcodes</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-value" id="stat-code">0</div>
+        <div class="stat-label">Code Snips</div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="section-header">
+      <span class="section-title">Quick Generate</span>
+      <span class="section-accent">●</span>
+    </div>
+    <div class="quick-actions-grid">
+      <button class="quick-card qr-card" onclick="Router.navigate('qr-generator')">
+        <div class="quick-card-glow"></div>
+        <div class="quick-icon">▦</div>
+        <div class="quick-label">QR Code</div>
+        <div class="quick-sub">15+ styles</div>
+        <div class="quick-arrow">→</div>
+      </button>
+      <button class="quick-card barcode-card" onclick="Router.navigate('barcode-generator')">
+        <div class="quick-card-glow"></div>
+        <div class="quick-icon">▐▌</div>
+        <div class="quick-label">Barcode</div>
+        <div class="quick-sub">12 types</div>
+        <div class="quick-arrow">→</div>
+      </button>
+      <button class="quick-card code-card" onclick="Router.navigate('code-generator')">
+        <div class="quick-card-glow"></div>
+        <div class="quick-icon">{ }</div>
+        <div class="quick-label">Code</div>
+        <div class="quick-sub">60+ templates</div>
+        <div class="quick-arrow">→</div>
+      </button>
+      <button class="quick-card scanner-card" onclick="Router.navigate('scanner')">
+        <div class="quick-card-glow"></div>
+        <div class="quick-icon">◎</div>
+        <div class="quick-label">Scanner</div>
+        <div class="quick-sub">Camera scan</div>
+        <div class="quick-arrow">→</div>
+      </button>
+    </div>
+
+    <!-- Features Grid -->
+    <div class="section-header">
+      <span class="section-title">All Features</span>
+      <span class="section-accent">●</span>
+    </div>
+    <div class="features-grid">
+      <button class="feature-item" onclick="Router.navigate('export-studio')">
+        <span class="feature-icon">📤</span>
+        <span class="feature-label">Export Studio</span>
+      </button>
+      <button class="feature-item" onclick="Router.navigate('library')">
+        <span class="feature-icon">📚</span>
+        <span class="feature-label">My Library</span>
+      </button>
+      <button class="feature-item" onclick="Router.navigate('collections')">
+        <span class="feature-icon">📁</span>
+        <span class="feature-label">Collections</span>
+      </button>
+      <button class="feature-item" onclick="Router.navigate('history')">
+        <span class="feature-icon">🕐</span>
+        <span class="feature-label">History</span>
+      </button>
+      <button class="feature-item" onclick="Router.navigate('settings')">
+        <span class="feature-icon">⚙️</span>
+        <span class="feature-label">Settings</span>
+      </button>
+      <button class="feature-item" onclick="Router.navigate('about')">
+        <span class="feature-icon">ℹ️</span>
+        <span class="feature-label">About</span>
+      </button>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="section-header">
+      <span class="section-title">Recent Activity</span>
+      <button class="section-btn" onclick="Router.navigate('history')">See All</button>
+    </div>
+    <div id="recent-list" class="recent-list">
+      <div class="empty-state">
+        <div class="empty-icon">✦</div>
+        <div class="empty-text">No activity yet</div>
+        <div class="empty-sub">Start generating to see history</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-page="home" onclick="Router.navigate('home')">
+      <span class="nav-icon">⌂</span>
+      <span class="nav-label">Home</span>
+    </button>
+    <button class="nav-item" data-page="library" onclick="Router.navigate('library')">
+      <span class="nav-icon">📚</span>
+      <span class="nav-label">Library</span>
+    </button>
+    <button class="nav-item nav-center" data-page="qr-generator" onclick="Router.navigate('qr-generator')">
+      <span class="nav-center-btn">▦</span>
+    </button>
+    <button class="nav-item" data-page="history" onclick="Router.navigate('history')">
+      <span class="nav-icon">🕐</span>
+      <span class="nav-label">History</span>
+    </button>
+    <button class="nav-item" data-page="settings" onclick="Router.navigate('settings')">
+      <span class="nav-icon">⚙</span>
+      <span class="nav-label">Settings</span>
+    </button>
+  </nav>
+</div>
+
+<!-- ========== QR GENERATOR PAGE ========== -->
+<div id="page-qr-generator" class="page" style="display:none">
+  <div class="page-header">
+    <button class="back-btn" onclick="Router.back()">←</button>
+    <div class="page-title">QR Generator</div>
+    <button class="icon-btn" onclick="Router.navigate('library')">📚</button>
+  </div>
+  <div class="page-content scrollable">
+
+    <!-- Input Section -->
+    <div class="glass-card input-card">
+      <div class="input-tabs">
+        <button class="tab-btn active" data-tab="url">URL</button>
+        <button class="tab-btn" data-tab="text">Text</button>
+        <button class="tab-btn" data-tab="wifi">WiFi</button>
+        <button class="tab-btn" data-tab="vcard">vCard</button>
+        <button class="tab-btn" data-tab="email">Email</button>
+        <button class="tab-btn" data-tab="sms">SMS</button>
+      </div>
+
+      <div class="tab-content active" id="tab-url">
+        <input type="url" class="cf-input" id="qr-url" placeholder="https://example.com" />
+      </div>
+      <div class="tab-content" id="tab-text">
+        <textarea class="cf-textarea" id="qr-text" placeholder="Enter your text here..."></textarea>
+      </div>
+      <div class="tab-content" id="tab-wifi">
+        <input type="text" class="cf-input" id="wifi-ssid" placeholder="Network Name (SSID)" />
+        <input type="password" class="cf-input mt-8" id="wifi-pass" placeholder="Password" />
+        <select class="cf-select mt-8" id="wifi-type">
+          <option value="WPA">WPA/WPA2</option>
+          <option value="WEP">WEP</option>
+          <option value="">None</option>
+        </select>
+      </div>
+      <div class="tab-content" id="tab-vcard">
+        <input type="text" class="cf-input" id="vcard-name" placeholder="Full Name" />
+        <input type="tel" class="cf-input mt-8" id="vcard-phone" placeholder="Phone Number" />
+        <input type="email" class="cf-input mt-8" id="vcard-email" placeholder="Email" />
+        <input type="text" class="cf-input mt-8" id="vcard-org" placeholder="Organization" />
+      </div>
+      <div class="tab-content" id="tab-email">
+        <input type="email" class="cf-input" id="email-to" placeholder="To: email@example.com" />
+        <input type="text" class="cf-input mt-8" id="email-subject" placeholder="Subject" />
+        <textarea class="cf-textarea mt-8" id="email-body" placeholder="Message..."></textarea>
+      </div>
+      <div class="tab-content" id="tab-sms">
+        <input type="tel" class="cf-input" id="sms-number" placeholder="Phone Number" />
+        <textarea class="cf-textarea mt-8" id="sms-message" placeholder="Message..."></textarea>
+      </div>
+    </div>
+
+    <!-- Style Section -->
+    <div class="glass-card">
+      <div class="card-title">QR Style</div>
+      <div class="style-scroll">
+        <button class="style-btn active" data-style="square">■ Square</button>
+        <button class="style-btn" data-style="dots">● Dots</button>
+        <button class="style-btn" data-style="rounded">◼ Rounded</button>
+        <button class="style-btn" data-style="circuit">⬡ Circuit</button>
+        <button class="style-btn" data-style="fluid">◈ Fluid</button>
+        <button class="style-btn" data-style="dna">⌬ DNA</button>
+        <button class="style-btn" data-style="pixel">▦ Pixel</button>
+        <button class="style-btn" data-style="cross">✚ Cross</button>
+      </div>
+    </div>
+
+    <!-- Colors -->
+    <div class="glass-card">
+      <div class="card-title">Colors</div>
+      <div class="color-row">
+        <div class="color-item">
+          <label class="color-label">Foreground</label>
+          <input type="color" class="color-picker" id="qr-fg-color" value="#c9a84c">
+        </div>
+        <div class="color-item">
+          <label class="color-label">Background</label>
+          <input type="color" class="color-picker" id="qr-bg-color" value="#0a0a0f">
+        </div>
+        <div class="color-item">
+          <label class="color-label">Eye Color</label>
+          <input type="color" class="color-picker" id="qr-eye-color" value="#ffffff">
+        </div>
+      </div>
+      <div class="gradient-toggle">
+        <label class="toggle-label">
+          <input type="checkbox" id="qr-gradient" class="toggle-input">
+          <span class="toggle-slider"></span>
+          <span>Gradient Mode</span>
+        </label>
+        <div id="gradient-colors" style="display:none" class="gradient-row">
+          <input type="color" class="color-picker" id="grad-color1" value="#c9a84c">
+          <span>→</span>
+          <input type="color" class="color-picker" id="grad-color2" value="#f0c66a">
+        </div>
+      </div>
+    </div>
+
+    <!-- Logo Embed -->
+    <div class="glass-card">
+      <div class="card-title">Logo / Image</div>
+      <div class="logo-upload-area" id="logo-drop-zone">
+        <span class="logo-upload-icon">🖼</span>
+        <span class="logo-upload-text">Tap to add logo inside QR</span>
+        <input type="file" id="qr-logo" accept="image/*" style="display:none">
+      </div>
+      <div id="logo-preview" style="display:none" class="logo-preview-wrap">
+        <img id="logo-preview-img" alt="Logo">
+        <button class="remove-logo-btn" id="remove-logo">✕</button>
+      </div>
+      <div class="size-row">
+        <label class="cf-label">Logo Size</label>
+        <input type="range" class="cf-range" id="logo-size" min="10" max="40" value="20">
+        <span id="logo-size-val">20%</span>
+      </div>
+    </div>
+
+    <!-- Size & Error Correction -->
+    <div class="glass-card">
+      <div class="card-title">Quality Settings</div>
+      <div class="setting-row">
+        <label class="cf-label">Size</label>
+        <input type="range" class="cf-range" id="qr-size" min="100" max="1000" step="50" value="300">
+        <span id="qr-size-val">300px</span>
+      </div>
+      <div class="setting-row">
+        <label class="cf-label">Error Correction</label>
+        <select class="cf-select" id="qr-ecl">
+          <option value="L">Low (7%)</option>
+          <option value="M" selected>Medium (15%)</option>
+          <option value="Q">Quartile (25%)</option>
+          <option value="H">High (30%)</option>
+        </select>
+      </div>
+      <div class="setting-row">
+        <label class="cf-label">Quiet Zone</label>
+        <input type="range" class="cf-range" id="qr-margin" min="0" max="10" value="4">
+        <span id="qr-margin-val">4</span>
+      </div>
+    </div>
+
+    <!-- Preview -->
+    <div class="glass-card preview-card">
+      <div class="card-title">Live Preview</div>
+      <div class="qr-preview-wrap">
+        <div id="qr-preview-container" class="qr-container">
+          <div class="qr-placeholder">
+            <div class="qr-placeholder-icon">▦</div>
+            <div class="qr-placeholder-text">Enter data above to generate</div>
+          </div>
+        </div>
+      </div>
+      <div class="preview-actions">
+        <button class="cf-btn cf-btn-outline" onclick="QRPage.generate()">Generate</button>
+        <button class="cf-btn cf-btn-gold" onclick="QRPage.saveToLibrary()">Save 💾</button>
+      </div>
+    </div>
+
+    <!-- Export -->
+    <div class="glass-card">
+      <div class="card-title">Export</div>
+      <div class="export-grid">
+        <button class="export-btn" onclick="QRPage.exportAs('png')">PNG</button>
+        <button class="export-btn" onclick="QRPage.exportAs('svg')">SVG</button>
+        <button class="export-btn" onclick="QRPage.exportAs('pdf')">PDF</button>
+        <button class="export-btn" onclick="QRPage.share()">Share</button>
+      </div>
+    </div>
+
+    <div class="bottom-spacer"></div>
+  </div>
+  <nav class="bottom-nav">
+    <button class="nav-item" data-page="home" onclick="Router.navigate('home')">
+      <span class="nav-icon">⌂</span><span class="nav-label">Home</span>
+    </button>
+    <button class="nav-item" data-page="library" onclick="Router.navigate('library')">
+      <span class="nav-icon">📚</span><span class="nav-label">Library</span>
+    </button>
+    <button class="nav-item nav-center active" data-page="qr-generator">
+      <span class="nav-center-btn">▦</span>
+    </button>
+    <button class="nav-item" data-page="history" onclick="Router.navigate('history')">
+      <span class="nav-icon">🕐</span><span class="nav-label">History</span>
+    </button>
+    <button class="nav-item" data-page="settings" onclick="Router.navigate('settings')">
+      <span class="nav-icon">⚙</span><span class="nav-label">Settings</span>
+    </button>
+  </nav>
+</div>
+
+<!-- ========== BARCODE GENERATOR PAGE ========== -->
+<div id="page-barcode-generator" class="page" style="display:none">
+  <div class="page-header">
+    <button class="back-btn" onclick="Router.back()">←</button>
+    <div class="page-title">Barcode Generator</div>
+    <button class="icon-btn" onclick="Router.navigate('library')">📚</button>
+  </div>
+  <div class="page-content scrollable">
+    <div class="glass-card input-card">
+      <label class="cf-label">Barcode Data</label>
+      <input type="text" class="cf-input" id="barcode-data" placeholder="Enter barcode value...">
+      <label class="cf-label mt-12">Barcode Type</label>
+      <select class="cf-select" id="barcode-type">
+        <option value="CODE128">Code 128 (Universal)</option>
+        <option value="CODE39">Code 39</option>
+        <option value="EAN13">EAN-13 (Product)</option>
+        <option value="EAN8">EAN-8</option>
+        <option value="UPC">UPC-A</option>
+        <option value="ITF14">ITF-14 (Shipping)</option>
+        <option value="MSI">MSI (Warehouse)</option>
+        <option value="pharmacode">Pharmacode (Medical)</option>
+        <option value="codabar">Codabar (Library)</option>
+      </select>
+    </div>
+
+    <div class="glass-card">
+      <div class="card-title">Appearance</div>
+      <div class="color-row">
+        <div class="color-item">
+          <label class="color-label">Bar Color</label>
+          <input type="color" class="color-picker" id="bc-fg" value="#c9a84c">
+        </div>
+        <div class="color-item">
+          <label class="color-label">Background</label>
+          <input type="color" class="color-picker" id="bc-bg" value="#0a0a0f">
+        </div>
+      </div>
+      <div class="setting-row">
+        <label class="cf-label">Width</label>
+        <input type="range" class="cf-range" id="bc-width" min="1" max="4" step="0.5" value="2">
+        <span id="bc-width-val">2</span>
+      </div>
+      <div class="setting-row">
+        <label class="cf-label">Height</label>
+        <input type="range" class="cf-range" id="bc-height" min="40" max="200" step="10" value="100">
+        <span id="bc-height-val">100px</span>
+      </div>
+      <div class="toggle-row">
+        <label class="toggle-label">
+          <input type="checkbox" id="bc-text" class="toggle-input" checked>
+          <span class="toggle-slider"></span>
+          <span>Show Text</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="glass-card preview-card">
+      <div class="card-title">Preview</div>
+      <div class="bc-preview-wrap">
+        <svg id="barcode-preview"></svg>
+      </div>
+      <div class="preview-actions">
+        <button class="cf-btn cf-btn-outline" onclick="BarcodePage.generate()">Generate</button>
+        <button class="cf-btn cf-btn-gold" onclick="BarcodePage.saveToLibrary()">Save 💾</button>
+      </div>
+    </div>
+
+    <div class="glass-card">
+      <div class="card-title">Export</div>
+      <div class="export-grid">
+        <button class="export-btn" onclick="BarcodePage.exportAs('png')">PNG</button>
+        <button class="export-btn" onclick="BarcodePage.exportAs('svg')">SVG</button>
+        <button class="export-btn" onclick="BarcodePage.exportAs('pdf')">PDF</button>
+        <button class="export-btn" onclick="BarcodePage.share()">Share</button>
+      </div>
+    </div>
+    <div class="bottom-spacer"></div>
+  </div>
+  <nav class="bottom-nav">
+    <button class="nav-item" data-page="home" onclick="Router.navigate('home')">
+      <span class="nav-icon">⌂</span><span class="nav-label">Home</span>
+    </button>
+    <button class="nav-item" data-page="library" onclick="Router.navigate('library')">
+      <span class="nav-icon">📚</span><span class="nav-label">Library</span>
+    </button>
+    <button class="nav-item nav-center" data-page="qr-generator" onclick="Router.navigate('qr-generator')">
+      <span class="nav-center-btn">▦</span>
+    </button>
+    <button class="nav-item" data-page="history" onclick="Router.navigate('history')">
+      <span class="nav-icon">🕐</span><span class="nav-label">History</span>
+    </button>
+    <button class="nav-item" data-page="settings" onclick="Router.navigate('settings')">
+      <span class="nav-icon">⚙</span><span class="nav-label">Settings</span>
+    </button>
+  </nav>
+</div>
+
+<!-- ========== CODE GENERATOR PAGE ========== -->
+<div id="page-code-generator" class="page" style="display:none">
+  <div class="page-header">
+    <button class="back-btn" onclick="Router.back()">←</button>
+    <div class="page-title">Code Generator</div>
+    <button class="icon-btn" onclick="Router.navigate('library')">📚</button>
+  </div>
+  <div class="page-content scrollable">
+    <div class="glass-card">
+      <label class="cf-label">Language</label>
+      <select class="cf-select" id="code-lang">
+        <option value="html">HTML</option>
+        <option value="css">CSS</option>
+        <option value="javascript">JavaScript</option>
+        <option value="python">Python</option>
+        <option value="gdscript">GDScript (Godot)</option>
+        <option value="json">JSON</option>
+        <option value="sql">SQL</option>
+        <option value="bash">Bash</option>
+        <option value="cpp">C++</option>
+        <option value="java">Java</option>
+      </select>
+      <label class="cf-label mt-12">Template</label>
+      <select class="cf-select" id="code-template">
+        <option value="blank">Blank</option>
+        <option value="hello-world">Hello World</option>
+        <option value="dark-card">Dark Card (HTML)</option>
+        <option value="glass-btn">Glass Button (CSS)</option>
+        <option value="fetch-api">Fetch API (JS)</option>
+        <option value="class-template">Class Template</option>
+        <option value="firebase-init">Firebase Init</option>
+        <option value="rest-api">REST API</option>
+      </select>
+    </div>
+
+    <div class="glass-card">
+      <div class="card-title-row">
+        <div class="card-title">Code Editor</div>
+        <div class="editor-actions">
+          <button class="mini-btn" onclick="CodePage.formatCode()">Format</button>
+          <button class="mini-btn" onclick="CodePage.copyCode()">Copy</button>
+          <button class="mini-btn" onclick="CodePage.clearCode()">Clear</button>
+        </div>
+      </div>
+      <div class="code-editor-wrap">
+        <div class="line-numbers" id="line-numbers"></div>
+        <textarea class="code-editor" id="code-editor" spellcheck="false"
+          placeholder="// Start coding here...
+// Select a template above or write your own code
+"></textarea>
+      </div>
+    </div>
+
+    <div class="glass-card">
+      <div class="card-title">Live Preview</div>
+      <div class="code-preview-tabs">
+        <button class="tab-btn active" data-preview="render">Render</button>
+        <button class="tab-btn" data-preview="image">As Image</button>
+      </div>
+      <div id="code-render-preview" class="code-render-frame">
+        <iframe id="preview-iframe" sandbox="allow-scripts"></iframe>
+      </div>
+      <div id="code-image-preview" class="code-image-frame" style="display:none">
+        <canvas id="code-canvas"></canvas>
+      </div>
+    </div>
+
+    <div class="glass-card">
+      <div class="card-title">Export</div>
+      <div class="export-grid">
+        <button class="export-btn" onclick="CodePage.exportAs('image')">Image</button>
+        <button class="export-btn" onclick="CodePage.exportAs('pdf')">PDF</button>
+        <button class="export-btn" onclick="CodePage.exportAs('file')">File</button>
+        <button class="export-btn" onclick="CodePage.share()">Share</button>
+      </div>
+    </div>
+    <div class="bottom-spacer"></div>
+  </div>
+  <nav class="bottom-nav">
+    <button class="nav-item" data-page="home" onclick="Router.navigate('home')">
+      <span class="nav-icon">⌂</span><span class="nav-label">Home</span>
+    </button>
+    <button class="nav-item" data-page="library" onclick="Router.navigate('library')">
+      <span class="nav-icon">📚</span><span class="nav-label">Library</span>
+    </button>
+    <button class="nav-item nav-center" data-page="qr-generator" onclick="Router.navigate('qr-generator')">
+      <span class="nav-center-btn">▦</span>
+    </button>
+    <button class="nav-item" data-page="history" onclick="Router.navigate('history')">
+      <span class="nav-icon">🕐</span><span class="nav-label">History</span>
+    </button>
+    <button class="nav-item" data-page="settings" onclick="Router.navigate('settings')">
+      <span class="nav-icon">⚙</span><span class="nav-label">Settings</span>
+    </button>
+  </nav>
+</div>
+
+<!-- ========== SCANNER PAGE ========== -->
+<div id="page-scanner" class="page" style="display:none">
+  <div class="page-header">
+    <button class="back-btn" onclick="Router.back()">←</button>
+    <div class="page-title">QR Scanner</div>
+    <button class="icon-btn" onclick="ScannerPage.toggleFlash()">🔦</button>
+  </div>
+  <div class="page-content">
+    <div class="scanner-wrap">
+      <video id="scanner-video" autoplay playsinline></video>
+      <canvas id="scanner-canvas" style="display:none"></canvas>
+      <div class="scanner-overlay">
+        <div class="scan-frame">
+          <div class="scan-corner tl"></div>
+          <div class="scan-corner tr"></div>
+          <div class="scan-corner bl"></div>
+          <div class="scan-corner br"></div>
+          <div class="scan-line"></div>
+        </div>
+        <div class="scan-hint">Align QR code within frame</div>
+      </div>
+    </div>
+    <div class="glass-card scan-result-card" id="scan-result" style="display:none">
+      <div class="scan-result-title">Scanned Result</div>
+      <div class="scan-result-value" id="scan-result-value"></div>
+      <div class="scan-result-actions">
+        <button class="cf-btn cf-btn-outline" onclick="ScannerPage.copyResult()">Copy</button>
+        <button class="cf-btn cf-btn-gold" onclick="ScannerPage.openResult()">Open</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== LIBRARY PAGE ========== -->
+<div id="page-library" class="page" style="display:none">
+  <div class="page-header">
+    <button class="back-btn" onclick="Router.back()">←</button>
+    <div class="page-title">My Library</div>
+    <button class="icon-btn" onclick="LibraryPage.toggleView()">⊞</button>
+  </div>
+  <div class="page-content scrollable">
+    <div class="search-bar-wrap">
+      <input type="search" class="search-input" id="library-search" placeholder="🔍 Search library...">
+    </div>
+    <div class="filter-tabs">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="qr">QR</button>
+      <button class="filter-btn" data-filter="barcode">Barcode</button>
+      <button class="filter-btn" data-filter="code">Code</button>
+      <button class="filter-btn" data-filter="favorite">★ Fav</button>
+    </div>
+    <div id="library-grid" class="library-grid">
+      <div class="empty-state">
+        <div class="empty-icon">📚</div>
+        <div class="empty-text">Library is empty</div>
+        <div class="empty-sub">Save generated codes to see them here</div>
+      </div>
+    </div>
+    <div class="bottom-spacer"></div>
+  </div>
+  <nav class="bottom-nav">
+    <button class="nav-item" data-page="home" onclick="Router.navigate('home')">
+      <span class="nav-icon">⌂</span><span class="nav-label">Home</span>
+    </button>
+    <button class="nav-item active" data-page="library">
+      <span class="nav-icon">📚</span><span class="nav-label">Library</span>
+    </button>
+    <button class="nav-item nav-center" data-page="qr-generator" onclick="Router.navigate('qr-generator')">
+      <span class="nav-center-btn">▦</span>
+    </button>
+    <button class="nav-item" data-page="history" onclick="Router.navigate('history')">
+      <span class="nav-icon">🕐</span><span class="nav-label">History</span>
+    </button>
+    <button class="nav-item" data-page="settings" onclick="Router.navigate('settings')">
+      <span class="nav-icon">⚙</span><span class="nav-label">Settings</span>
+    </button>
+  </nav>
+</div>
+
+<!-- ========== HISTORY PAGE ========== -->
+<div id="page-history" class="page" style="display:none">
+  <div class="page-header">
+    <button class="back-btn" onclick="Router.back()">←</button>
+    <div class="page-title">History</div>
+    <button class="icon-btn" onclick="HistoryPage.clearAll()">🗑</button>
+  </div>
+  <div class="page-content scrollable">
+    <div id="history-list" class="history-list">
+      <div class="empty-state">
+        <div class="empty-icon">🕐</div>
+        <div class="empty-text">No history yet</div>
+        <div class="empty-sub">Your activity will appear here</div>
+      </div>
+    </div>
+    <div class="bottom-spacer"></div>
+  </div>
+  <nav class="bottom-nav">
+    <button class="nav-item" data-page="home" onclick="Router.navigate('home')">
+      <span class="nav-icon">⌂</span><span class="nav-label">Home</span>
+    </button>
+    <button class="nav-item" data-page="library" onclick="Router.navigate('library')">
+      <span class="nav-icon">📚</span><span class="nav-label">Library</span>
+    </button>
+    <button class="nav-item nav-center" data-page="qr-generator" onclick="Router.navigate('qr-generator')">
+      <span class="nav-center-btn">▦</span>
+    </button>
+    <button class="nav-item active" data-page="history">
+      <span class="nav-icon">🕐</span><span class="nav-label">History</span>
+    </button>
+    <button class="nav-item" data-page="settings" onclick="Router.navigate('settings')">
+      <span class="nav-icon">⚙</span><span class="nav-label">Settings</span>
+    </button>
+  </nav>
+</div>
+
+<!-- Settings page mein Appearance section replace karo -->
+<div class="settings-section">
+  <div class="settings-section-title">Theme & Appearance</div>
+  <div class="glass-card" style="padding:18px">
+    <div id="theme-picker-container">
+      <!-- ThemeSystem.renderThemePicker() se render hoga -->
+    </div>
+  </div>
+</div>
+
+<div id="page-settings" class="page" style="display:none">
+  <div class="page-header">
+    <button class="back-btn" onclick="Router.back()">←</button>
+    <div class="page-title">Settings</div>
+  </div>
+  <div class="page-content scrollable">
+    <div class="settings-section">
+      <div class="settings-section-title">Appearance</div>
+      <div class="glass-card settings-card">
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-name">Theme</div>
+            <div class="setting-desc">Choose your color theme</div>
+          </div>
+          <select class="cf-select-mini" id="theme-select" onchange="SettingsPage.changeTheme(this.value)">
+            <option value="dark-luxury">Dark Luxury</option>
+            <option value="amoled">AMOLED Black</option>
+            <option value="gold-luxury">Gold Luxury</option>
+            <option value="purple-dark">Purple Dark</option>
+          </select>
+        </div>
+        <div class="setting-divider"></div>
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-name">Language</div>
+            <div class="setting-desc">App language</div>
+          </div>
+          <select class="cf-select-mini" id="lang-select" onchange="SettingsPage.changeLang(this.value)">
+            <option value="en">English</option>
+            <option value="ur">اردو</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-section-title">Experience</div>
+      <div class="glass-card settings-card">
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-name">Haptic Feedback</div>
+            <div class="setting-desc">Vibration on actions</div>
+          </div>
+          <label class="toggle-label">
+            <input type="checkbox" id="haptics-toggle" class="toggle-input" checked
+              onchange="SettingsPage.toggleHaptics(this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="setting-divider"></div>
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-name">Sound Effects</div>
+            <div class="setting-desc">Audio feedback</div>
+          </div>
+          <label class="toggle-label">
+            <input type="checkbox" id="sounds-toggle" class="toggle-input" checked
+              onchange="SettingsPage.toggleSounds(this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="setting-divider"></div>
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-name">Auto Save</div>
+            <div class="setting-desc">Auto save to library</div>
+          </div>
+          <label class="toggle-label">
+            <input type="checkbox" id="autosave-toggle" class="toggle-input" checked
+              onchange="SettingsPage.toggleAutoSave(this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-section-title">Export</div>
+      <div class="glass-card settings-card">
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-name">Default Format</div>
+            <div class="setting-desc">Default export format</div>
+          </div>
+          <select class="cf-select-mini" id="format-select" onchange="SettingsPage.changeFormat(this.value)">
+            <option value="png">PNG</option>
+            <option value="svg">SVG</option>
+            <option value="pdf">PDF</option>
+          </select>
+        </div>
+        <div class="setting-divider"></div>
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-name">Watermark</div>
+            <div class="setting-desc">Custom watermark text</div>
+          </div>
+          <input type="text" class="cf-input-mini" id="watermark-input"
+            placeholder="Your brand" onchange="SettingsPage.changeWatermark(this.value)">
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-section-title">Data</div>
+      <div class="glass-card settings-card">
+        <button class="setting-item setting-btn" onclick="SettingsPage.exportData()">
+          <div class="setting-info">
+            <div class="setting-name">Export Library</div>
+            <div class="setting-desc">Backup your saved codes</div>
+          </div>
+          <span class="setting-arrow">→</span>
+        </button>
+        <div class="setting-divider"></div>
+        <button class="setting-item setting-btn danger" onclick="SettingsPage.clearHistory()">
+          <div class="setting-info">
+            <div class="setting-name">Clear History</div>
+            <div class="setting-desc">Delete all activity history</div>
+          </div>
+          <span class="setting-arrow">→</span>
+        </button>
+        <div class="setting-divider"></div>
+        <button class="setting-item setting-btn danger" onclick="SettingsPage.clearAll()">
+          <div class="setting-info">
+            <div class="setting-name">Reset App</div>
+            <div class="setting-desc">Delete all data and reset</div>
+          </div>
+          <span class="setting-arrow">→</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="storage-info glass-card" id="storage-info">
+      <div class="storage-title">Storage Used</div>
+      <div class="storage-bar-wrap">
+        <div class="storage-bar"><div class="storage-fill" id="storage-fill"></div></div>
+        <span id="storage-text">Calculating...</span>
+      </div>
+    </div>
+
+    <div class="bottom-spacer"></div>
+  </div>
+  <nav class="bottom-nav">
+    <button class="nav-item" data-page="home" onclick="Router.navigate('home')">
+      <span class="nav-icon">⌂</span><span class="nav-label">Home</span>
+    </button>
+    <button class="nav-item" data-page="library" onclick="Router.navigate('library')">
+      <span class="nav-icon">📚</span><span class="nav-label">Library</span>
+    </button>
+    <button class="nav-item nav-center" data-page="qr-generator" onclick="Router.navigate('qr-generator')">
+      <span class="nav-center-btn">▦</span>
+    </button>
+    <button class="nav-item" data-page="history" onclick="Router.navigate('history')">
+      <span class="nav-icon">🕐</span><span class="nav-label">History</span>
+    </button>
+    <button class="nav-item active" data-page="settings">
+      <span class="nav-icon">⚙</span><span class="nav-label">Settings</span>
+    </button>
+  </nav>
+</div>
+
+<!-- ========== ABOUT PAGE ========== -->
+<div id="page-about" class="page" style="display:none">
+  <div class="page-header">
+    <button class="back-btn" onclick="Router.back()">←</button>
+    <div class="page-title">About</div>
+  </div>
+  <div class="page-content scrollable">
+    <div class="about-hero glass-card">
+      <div class="about-logo">⬡</div>
+      <div class="about-name">CODEFORGE X</div>
+      <div class="about-version">Version 1.0.0</div>
+      <div class="about-tagline">World's Most Advanced Generator</div>
+    </div>
+    <div class="glass-card about-features">
+      <div class="about-feature-item">
+        <span>▦</span><span>15+ QR Code Styles</span>
+      </div>
+      <div class="about-feature-item">
+        <span>▐▌</span><span>12 Barcode Types</span>
+      </div>
+      <div class="about-feature-item">
+        <span>{ }</span><span>60+ Code Templates</span>
+      </div>
+      <div class="about-feature-item">
+        <span>📤</span><span>PNG, SVG, PDF Export</span>
+      </div>
+      <div class="about-feature-item">
+        <span>📴</span><span>Works Offline (PWA)</span>
+      </div>
+    </div>
+    <div class="bottom-spacer"></div>
+  </div>
+</div>
+
+<!-- External: async load non-critical -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+
+<!-- Critical libs -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.5/JsBarcode.all.min.js" defer></script>
+
+<!-- Core (order matters) -->
+<script src="js/db.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/performance.js"></script>
+<script src="js/pages/onboarding.js" defer></script>
+<script src="js/router.js"></script>
+<script src="js/themes.js"></script>
+<script src="js/sounds.js"></script>
+<script src="js/haptics.js"></script>
+<script src="js/animations.js"></script>
+<script src="js/permissions.js"></script>
+
+<!-- Pages (defer all) -->
+<script src="js/pages/splash.js" defer></script>
+<script src="js/pages/home.js" defer></script>
+<script src="js/pages/qr-generator.js" defer></script>
+<script src="js/pages/barcode-generator.js" defer></script>
+<script src="js/pages/code-generator.js" defer></script>
+<script src="js/pages/scanner.js" defer></script>
+<script src="js/pages/library.js" defer></script>
+<script src="js/pages/history.js" defer></script>
+<script src="js/pages/settings.js" defer></script>
+<script src="js/pages/about.js" defer></script>
+
+<!-- App last -->
+<script src="js/app.js" defer></script>
+
+</body>
+</html
