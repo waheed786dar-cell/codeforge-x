@@ -19,8 +19,10 @@ jobs:
       - name: Create Cordova Project
         run: |
           cordova create myApp com.example.codeforge "CodeForge"
-          cp -r assets css js lib manifest.json sw.js index.html myApp/www/
           cd myApp
+          rm -rf www/*
+          cp -r $GITHUB_WORKSPACE/* www/ 2>/dev/null || true
+          rm -rf www/myApp
           cordova platform add android
           cordova build android
       - name: Upload APK
